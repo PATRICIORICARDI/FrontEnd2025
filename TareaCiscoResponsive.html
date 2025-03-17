@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Importante para la responsividad -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página con Hero Section</title>
+    <style>
+      /* Reset básico */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      /********************************
+       *       ESTILOS DEL HEADER     *
+       ********************************/
+      header {
+        background-color: #fff;
+        border-bottom: 1px solid #ccc;
+        position: relative;
+        z-index: 1000;
+      }
+
+      nav.top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        position: relative;
+      }
+
+      /* Sección izquierda del nav */
+      .nav-left {
+        display: flex;
+        align-items: center;
+      }
+
+      .cisco-logo {
+        height: 40px;
+        margin-right: 1rem;
+      }
+
+      .cisco-text {
+        font-size: 1.2rem;
+        color: #00aef0;
+        font-weight: bold;
+        margin-right: 2rem;
+      }
+
+      /* Menú principal (lista horizontal en desktop) */
+      .nav-items {
+        display: flex;
+        list-style: none;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      .nav-items li {
+        margin-right: 1.5rem;
+      }
+
+      .nav-items li a {
+        text-decoration: none;
+        color: #000;
+        font-weight: 500;
+      }
+
+      /* Sección derecha del nav (para otros elementos si los hay) */
+      .nav-right {
+        display: flex;
+        align-items: center;
+      }
+
+      /* Botón hamburguesa */
+      .hamburger {
+        display: none; /* Oculto en desktop */
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 24px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        z-index: 1100;
+        margin-right: 30px;
+      }
+
+      .hamburger span {
+        width: 100%;
+        height: 3px;
+        background-color: #333;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      /* Transforma el botón hamburguesa en “X” al activarse */
+      .hamburger.active span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+      }
+      .hamburger.active span:nth-child(2) {
+        opacity: 0;
+      }
+      .hamburger.active span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+      }
+
+      /********************************
+       *       SECCIÓN HERO           *
+       ********************************/
+      .hero {
+        background-color: #041f4a;
+        color: #fff;
+        padding: 4rem 2rem;
+      }
+
+      .hero-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .hero-left {
+        flex: 1 1 400px;
+        margin-bottom: 1rem;
+      }
+
+      .hero-left h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .hero-left p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        color: #ccc;
+      }
+
+      .hero-buttons {
+        display: flex;
+        gap: 1rem;
+      }
+
+      .hero-buttons .btn {
+        background: #fff;
+        color: #041f4a;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      .hero-buttons .btn:hover {
+        background-color: #0078d4;
+        color: #fff;
+      }
+
+      .hero-right {
+        flex: 1 1 300px;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+      }
+
+      .partner-logo {
+        max-width: 150px;
+        margin: 0 1rem;
+      }
+
+      /********************************
+       *    ESTILOS DEL MAIN, ETC.    *
+       ********************************/
+      main {
+        padding: 1rem;
+      }
+
+      .intro,
+      .articles {
+        margin-bottom: 1.5rem;
+      }
+
+      .articles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .articles article {
+        background: #f4f4f4;
+        padding: 1rem;
+        flex: 1 1 calc(33.333% - 1rem);
+        border: 1px solid #ddd;
+      }
+
+      aside {
+        background: #e2e2e2;
+        padding: 1rem;
+        margin: 1rem;
+      }
+
+      footer {
+        background-color: #003366;
+        color: #fff;
+        text-align: center;
+        padding: 1rem;
+      }
+
+      /********************************
+       *       MEDIA QUERIES          *
+       ********************************/
+      @media (max-width: 768px) {
+        /* Mostrar el botón hamburguesa y posicionarlo a la derecha */
+        .hamburger {
+          display: flex;
+          position: absolute;
+          right: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        /* El menú principal se transforma en un contenedor vertical que se muestra al pulsar el botón */
+        .nav-items {
+          position: absolute;
+          top: 60px; /* Altura aproximada del header */
+          left: 0;
+          right: 0;
+          background-color: #fff;
+          flex-direction: column;
+          align-items: center;
+          padding: 1rem 0;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          opacity: 0;
+          transform: translateY(-20px);
+          pointer-events: none;
+        }
+
+        .nav-items.show {
+          opacity: 1;
+          transform: translateY(0);
+          pointer-events: auto;
+        }
+
+        .nav-items li {
+          margin: 1rem 0;
+        }
+
+        /* Ajusta el contenedor nav para distribuir correctamente el logo y dejar espacio para el botón */
+        nav.top-nav {
+          justify-content: flex-start;
+        }
+
+        /* Para que el contenido principal se centre en mobile */
+        .hero-content {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .hero-left,
+        .hero-right {
+          flex: 1 1 100%;
+        }
+
+        .partner-logo {
+          margin: 0.5rem;
+        }
+
+        .articles {
+          flex-direction: column;
+        }
+
+        .articles article {
+          flex: 1 1 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HEADER / NAVBAR -->
+    <header>
+      <nav class="top-nav">
+        <!-- Sección Izquierda: Logo + texto -->
+        <div class="nav-left">
+          <img
+            src="https://www.cisco.com/etc/designs/cdc/brand/img/cisco-logo.svg"
+            alt="Cisco Logo"
+            class="cisco-logo"
+          />
+          <span class="cisco-text">Cisco</span>
+        </div>
+
+        <!-- Botón Hamburguesa (visible en móviles, se posiciona a la derecha) -->
+        <button class="hamburger" aria-label="Menú">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        <!-- Menú principal -->
+        <ul class="nav-items">
+          <li><a href="#">Products and Services</a></li>
+          <li><a href="#">Solutions</a></li>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Learn</a></li>
+        </ul>
+
+        <!-- Sección derecha (para otros elementos) -->
+        <div class="nav-right">
+          <!-- Otros elementos, si los hay -->
+        </div>
+      </nav>
+    </header>
+
+    <!-- SECCIÓN HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <!-- Columna Izquierda: Título, texto y botones -->
+        <div class="hero-left">
+          <h1>Bringing AI to the Enterprise</h1>
+          <p>
+            Cisco and NVIDIA expand partnership to accelerate AI adoption in the
+            enterprise.
+          </p>
+          <div class="hero-buttons">
+            <button class="btn">Read press release</button>
+            <button class="btn">Read blog</button>
+          </div>
+        </div>
+        <!-- Columna Derecha: Logos -->
+        <div class="hero-right">
+          <img
+            src="https://www.cisco.com/etc/designs/cdc/brand/img/cisco-logo.svg"
+            alt="Cisco Logo"
+            class="partner-logo"
+          />
+          <img
+            src="https://upload.wikimedia.org/wikipedia/en/2/21/Nvidia_logo.svg"
+            alt="NVIDIA Logo"
+            class="partner-logo"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main>
+      <!-- Sección de introducción -->
+      <section class="intro">
+        <h1>Bienvenido a Mi Página</h1>
+        <p>
+          Esta es la sección de introducción con contenido relevante para el
+          usuario.
+        </p>
+      </section>
+
+      <!-- Sección de artículos -->
+      <section class="articles">
+        <article>
+          <h2>Artículo 1</h2>
+          <p>Contenido del artículo 1.</p>
+        </article>
+        <article>
+          <h2>Artículo 2</h2>
+          <p>Contenido del artículo 2.</p>
+        </article>
+        <article>
+          <h2>Artículo 3</h2>
+          <p>Contenido del artículo 3.</p>
+        </article>
+      </section>
+    </main>
+
+    <!-- ASIDE -->
+    <aside>
+      <h3>Barra lateral</h3>
+      <p>Contenido secundario (ej: noticias, enlaces o publicidad).</p>
+    </aside>
+
+    <!-- FOOTER -->
+    <footer>
+      <p>© 2023 Mi Página. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- JavaScript para togglear el menú en pantallas pequeñas -->
+    <script>
+      const hamburger = document.querySelector(".hamburger");
+      const navItems = document.querySelector(".nav-items");
+
+      hamburger.addEventListener("click", function () {
+        this.classList.toggle("active");
+        navItems.classList.toggle("show");
+      });
+    </script>
+  </body>
+</html>
