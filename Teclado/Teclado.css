@@ -1,0 +1,41 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Contenedor del teclado */
+.keyboard {
+  display: flex;
+}
+
+/* Estilos de cada tecla */
+.key {
+  width: 60px;
+  height: 60px;
+  margin: 5px;
+  border: 2px solid yellow;
+  background-color: black;
+  color: yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Estilo para la tecla seleccionada (ejemplo: letra "A") */
+.key.selected {
+  background-color: green;
+  color: black;
+}
