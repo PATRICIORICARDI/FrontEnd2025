@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Importante para la responsividad -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pedido de Hamburguesa</title>
+    <style>
+      /* Reset básico */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+      }
+      h1 {
+        margin-bottom: 20px;
+        color: #333;
+      }
+      p.instr {
+        margin-bottom: 15px;
+        color: #555;
+      }
+      input[type="text"] {
+        width: 80%;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border: none;
+        background-color: #0078d4;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #005bb5;
+      }
+      .burger-card {
+        display: none; /* Se mostrará cuando se realice el pedido */
+        margin-top: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        padding: 20px;
+      }
+      .burger-card img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 20px;
+      }
+      .burger-info {
+        text-align: left;
+      }
+      .burger-info h2 {
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+      }
+      .burger-info p {
+        font-size: 1.2rem;
+        color: #555;
+      }
+      .error {
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Ordena tu Hamburguesa</h1>
+      <p class="instr">
+        Ingresa los ingredientes separados por comas (Ej:
+        <em>tocino, queso</em> o <em>pollo</em>)
+      </p>
+      <input type="text" id="ingredients" placeholder="Ej: tocino, queso" />
+      <br />
+      <button id="orderBtn">Ordenar</button>
+
+      <!-- Card para mostrar el resultado del pedido -->
+      <div class="burger-card" id="burgerCard">
+        <img id="burgerImage" src="" alt="Imagen de Hamburguesa" />
+        <div class="burger-info">
+          <h2 id="burgerTitle"></h2>
+          <p id="burgerDescription"></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Función que simula la orden de una hamburguesa mediante una promesa.
+      function ordenarHamburguesa(ingredientes) {
+        return new Promise(function (resolve, reject) {
+          setTimeout(function () {
+            if (
+              ingredientes.includes("pulpo") ||
+              ingredientes.includes("cebolla")
+            ) {
+              reject(
+                "De momento no cuento con ese ingrediente 😔, una disculpa"
+              );
+            }
+            resolve(`🍔 con ${ingredientes.join(", ")}`);
+          }, 1000);
+        });
+      }
+
+      const orderBtn = document.getElementById("orderBtn");
+      const ingredientsInput = document.getElementById("ingredients");
+      const burgerCard = document.getElementById("burgerCard");
+      const burgerImage = document.getElementById("burgerImage");
+      const burgerTitle = document.getElementById("burgerTitle");
+      const burgerDescription = document.getElementById("burgerDescription");
+
+      orderBtn.addEventListener("click", function () {
+        const input = ingredientsInput.value.trim();
+        if (!input) {
+          alert("Por favor ingresa al menos un ingrediente.");
+          return;
+        }
+        // Convierte el input a un array de ingredientes, separando por comas
+        const ingredientes = input
+          .toLowerCase()
+          .split(",")
+          .map((item) => item.trim());
+
+        // Muestra la card con un mensaje provisional
+        burgerCard.style.display = "flex";
+        burgerTitle.textContent = "Preparando tu hamburguesa...";
+        burgerDescription.textContent = "";
+        burgerImage.src = "https://via.placeholder.com/150?text=Preparando";
+
+        ordenarHamburguesa(ingredientes)
+          .then(function (result) {
+            let imageUrl = "";
+            let title = "";
+            // Se determina la imagen y título según los ingredientes ingresados
+            if (
+              ingredientes.includes("tocino") &&
+              ingredientes.includes("queso")
+            ) {
+              imageUrl = "https://via.placeholder.com/150?text=Cheese+Bacon";
+              title = "Hamburguesa con queso y tocino";
+            } else if (ingredientes.includes("pollo")) {
+              imageUrl = "https://via.placeholder.com/150?text=Chicken";
+              title = "Hamburguesa de pollo";
+            } else {
+              // Si se ingresan otros ingredientes permitidos, se muestra una opción genérica
+              imageUrl = "https://via.placeholder.com/150?text=Especial";
+              title = "Hamburguesa especial";
+            }
+            burgerImage.src = imageUrl;
+            burgerTitle.textContent = title;
+            burgerDescription.textContent = result;
+            burgerDescription.classList.remove("error");
+          })
+          .catch(function (error) {
+            burgerImage.src = "https://via.placeholder.com/150?text=Error";
+            burgerTitle.textContent = "Error en el pedido";
+            burgerDescription.textContent = error;
+            burgerDescription.classList.add("error");
+          });
+      });
+    </script>
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Importante para la responsividad -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pedido de Hamburguesa</title>
+    <style>
+      /* Reset básico */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+      }
+      h1 {
+        margin-bottom: 20px;
+        color: #333;
+      }
+      p.instr {
+        margin-bottom: 15px;
+        color: #555;
+      }
+      input[type="text"] {
+        width: 80%;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border: none;
+        background-color: #0078d4;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #005bb5;
+      }
+      .burger-card {
+        display: none; /* Se mostrará cuando se realice el pedido */
+        margin-top: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        padding: 20px;
+      }
+      .burger-card img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 20px;
+      }
+      .burger-info {
+        text-align: left;
+      }
+      .burger-info h2 {
+        margin-bottom: 10px;
+        font-size: 1.5rem;
+      }
+      .burger-info p {
+        font-size: 1.2rem;
+        color: #555;
+      }
+      .error {
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Ordena tu Hamburguesa</h1>
+      <p class="instr">
+        Ingresa los ingredientes separados por comas (Ej:
+        <em>tocino, queso</em> o <em>pollo</em>)
+      </p>
+      <input type="text" id="ingredients" placeholder="Ej: tocino, queso" />
+      <br />
+      <button id="orderBtn">Ordenar</button>
+
+      <!-- Card para mostrar el resultado del pedido -->
+      <div class="burger-card" id="burgerCard">
+        <img id="burgerImage" src="" alt="Imagen de Hamburguesa" />
+        <div class="burger-info">
+          <h2 id="burgerTitle"></h2>
+          <p id="burgerDescription"></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Función que simula la orden de una hamburguesa mediante una promesa.
+      function ordenarHamburguesa(ingredientes) {
+        return new Promise(function (resolve, reject) {
+          setTimeout(function () {
+            if (
+              ingredientes.includes("pulpo") ||
+              ingredientes.includes("cebolla")
+            ) {
+              reject(
+                "De momento no cuento con ese ingrediente 😔, una disculpa"
+              );
+            }
+            resolve(`🍔 con ${ingredientes.join(", ")}`);
+          }, 1000);
+        });
+      }
+
+      const orderBtn = document.getElementById("orderBtn");
+      const ingredientsInput = document.getElementById("ingredients");
+      const burgerCard = document.getElementById("burgerCard");
+      const burgerImage = document.getElementById("burgerImage");
+      const burgerTitle = document.getElementById("burgerTitle");
+      const burgerDescription = document.getElementById("burgerDescription");
+
+      orderBtn.addEventListener("click", function () {
+        const input = ingredientsInput.value.trim();
+        if (!input) {
+          alert("Por favor ingresa al menos un ingrediente.");
+          return;
+        }
+        // Convierte el input a un array de ingredientes, separando por comas
+        const ingredientes = input
+          .toLowerCase()
+          .split(",")
+          .map((item) => item.trim());
+
+        // Muestra la card con un mensaje provisional
+        burgerCard.style.display = "flex";
+        burgerTitle.textContent = "Preparando tu hamburguesa...";
+        burgerDescription.textContent = "";
+        burgerImage.src = "https://via.placeholder.com/150?text=Preparando";
+
+        ordenarHamburguesa(ingredientes)
+          .then(function (result) {
+            let imageUrl = "";
+            let title = "";
+            // Se determina la imagen y título según los ingredientes ingresados
+            if (
+              ingredientes.includes("tocino") &&
+              ingredientes.includes("queso")
+            ) {
+              imageUrl = "https://via.placeholder.com/150?text=Cheese+Bacon";
+              title = "Hamburguesa con queso y tocino";
+            } else if (ingredientes.includes("pollo")) {
+              imageUrl = "https://via.placeholder.com/150?text=Chicken";
+              title = "Hamburguesa de pollo";
+            } else {
+              // Si se ingresan otros ingredientes permitidos, se muestra una opción genérica
+              imageUrl = "https://via.placeholder.com/150?text=Especial";
+              title = "Hamburguesa especial";
+            }
+            burgerImage.src = imageUrl;
+            burgerTitle.textContent = title;
+            burgerDescription.textContent = result;
+            burgerDescription.classList.remove("error");
+          })
+          .catch(function (error) {
+            burgerImage.src = "https://via.placeholder.com/150?text=Error";
+            burgerTitle.textContent = "Error en el pedido";
+            burgerDescription.textContent = error;
+            burgerDescription.classList.add("error");
+          });
+      });
+    </script>
+  </body>
+</html>
